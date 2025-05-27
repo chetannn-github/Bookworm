@@ -4,7 +4,7 @@ import { connectToDB } from "./config/db.config.js";
 
 
 import authRouter from "./routes/auth.routes.js";
-
+import bookRouter from "./routes/book.routes.js";
 
 
 
@@ -22,6 +22,7 @@ app.get("/test", (req,res)=> {
 })
 
 app.use("/api/auth", authRouter);
+app.use("/api/book",bookRouter)
 
 
 

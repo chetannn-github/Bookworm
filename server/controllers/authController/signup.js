@@ -1,7 +1,7 @@
 import "dotenv/config"
 import { User } from "../../models/user.model.js"
 
-import { isPasswordStrong } from "../../utils/isPasswordStrong.js";
+import { isPasswordStrong } from "../../utils/password/index.js";
 import { isValidEmail } from "../../utils/isValidEmail.js";
 import { DICE_BEAR_API } from "../../utils/constants.js";
 import { generateToken } from "../../utils/tokens.js";
