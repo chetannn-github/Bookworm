@@ -1,0 +1,1 @@
+export const DICE_BEAR_API = "https://api.dicebear.com/9.x/pixel-art/svg?seed="
