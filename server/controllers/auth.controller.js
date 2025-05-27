@@ -46,7 +46,7 @@ export const signupController = async(req, res) => {
 
         // generate jwt token 
         let token = jwt.sign(user.id, process.env.JWT_SECRET);
-        
+
         await user.save();
         user.password = undefined;
         return res.json({user, token});
@@ -55,4 +55,35 @@ export const signupController = async(req, res) => {
         return res.json({"message" : error.message});
     }
     
+}
+
+
+export const loginController = async(req,res) =>{
+    try {
+        let {username, password} = req.body;
+        if(!username  || !password) {
+            return res.json({"message" : "some fields are missing"});
+        }
+
+        let user = await User.findOne({username});
+        // console.log(user);
+        if(!user) {
+            return res.json({"message" : "username or password is incorrect"});
+        }
+
+        let isPasswordCorrect = await bcrypt.compare(password,user.password);
+        
+        if(!isPasswordCorrect) {
+            return res.json({"message" : "username or password is incorrect"});
+        }
+
+        let token = jwt.sign(user.id, process.env.JWT_SECRET);
+        user.password = undefined;
+        return res.json({user, token});
+
+        
+    } catch (error) {
+        console.log(error);
+        return res.json({"message" : error.message});
+    }
 }
