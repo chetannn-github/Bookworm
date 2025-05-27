@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { hashPassword } from "../utils/hashPassword.js";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -23,6 +24,13 @@ const userSchema = new mongoose.Schema({
         required : true,
     },
 });
+
+userSchema.pre("save",async function (next){
+    if(!this.isModified("password")) return next();
+
+    this.password = await hashPassword(this.password);
+    next();
+})
 
 
 export const User = mongoose.model('User', userSchema);
