@@ -1,8 +1,7 @@
 import mongoose from "mongoose"
-import { hashPassword } from "../utils/hashPassword.js";
 
 const bookSchema = new mongoose.Schema({
-    name: {
+    title: {
         type : String,
         required : true,
         minLength : 3,
