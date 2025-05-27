@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../../models/user.model.js";
 import jwt  from "jsonwebtoken";
 import "dotenv/config"
+import { generateToken } from "../../utils/tokens.js";
 
 export const loginController = async(req,res) =>{
     try {
@@ -21,12 +22,10 @@ export const loginController = async(req,res) =>{
         if(!isPasswordCorrect) {
             return res.json({"message" : "username or password is incorrect"});
         }
-
-        let token = jwt.sign(user.id, process.env.JWT_SECRET);
+        let token = generateToken(user.id);
         user.password = undefined;
         return res.json({user, token});
 
-        
     } catch (error) {
         console.log(error);
         return res.json({"message" : error.message});
