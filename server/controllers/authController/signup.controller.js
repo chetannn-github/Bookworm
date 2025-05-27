@@ -1,11 +1,10 @@
-import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
 import "dotenv/config"
 import { User } from "../../models/user.model.js"
 
 import { isPasswordStrong } from "../../utils/isPasswordStrong.js";
 import { isValidEmail } from "../../utils/isValidEmail.js";
 import { DICE_BEAR_API } from "../../utils/constants.js";
+import { generateToken } from "../../utils/tokens.js";
 
 
 export const signupController = async(req, res) => {
@@ -38,19 +37,15 @@ export const signupController = async(req, res) => {
             return res.json({"message" : "user already exists"});
         }
 
-        // hash password 
-        let salt = await bcrypt.genSalt();
-        let hash = await bcrypt.hash(password, salt);
-
         let profileImage = DICE_BEAR_API + username;
 
-        const user = new User({username,email,password : hash,profileImage});
-        console.log(user);
-
+        const user = new User({username,email,password,profileImage});
+        
         // generate jwt token 
-        let token = jwt.sign(user.id, process.env.JWT_SECRET);
+        let token = generateToken(user.id)
 
         await user.save();
+        console.log(user);
         user.password = undefined;
         return res.json({user, token});
     } catch (error) {
