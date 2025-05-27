@@ -1,10 +1,11 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import "dotenv/config"
-import { User } from "../models/user.model.js"
+import { User } from "../../models/user.model.js"
 
-import { isPasswordStrong } from "../utils/isPasswordStrong.js";
-import { isValidEmail } from "../utils/isValidEmail.js";
+import { isPasswordStrong } from "../../utils/isPasswordStrong.js";
+import { isValidEmail } from "../../utils/isValidEmail.js";
+import { DICE_BEAR_API } from "../../utils/constants.js";
 
 
 export const signupController = async(req, res) => {
@@ -41,7 +42,9 @@ export const signupController = async(req, res) => {
         let salt = await bcrypt.genSalt();
         let hash = await bcrypt.hash(password, salt);
 
-        const user = new User({username,email,password : hash});
+        let profileImage = DICE_BEAR_API + username;
+
+        const user = new User({username,email,password : hash,profileImage});
         console.log(user);
 
         // generate jwt token 
@@ -57,33 +60,3 @@ export const signupController = async(req, res) => {
     
 }
 
-
-export const loginController = async(req,res) =>{
-    try {
-        let {username, password} = req.body;
-        if(!username  || !password) {
-            return res.json({"message" : "some fields are missing"});
-        }
-
-        let user = await User.findOne({username});
-        // console.log(user);
-        if(!user) {
-            return res.json({"message" : "username or password is incorrect"});
-        }
-
-        let isPasswordCorrect = await bcrypt.compare(password,user.password);
-        
-        if(!isPasswordCorrect) {
-            return res.json({"message" : "username or password is incorrect"});
-        }
-
-        let token = jwt.sign(user.id, process.env.JWT_SECRET);
-        user.password = undefined;
-        return res.json({user, token});
-
-        
-    } catch (error) {
-        console.log(error);
-        return res.json({"message" : error.message});
-    }
-}
