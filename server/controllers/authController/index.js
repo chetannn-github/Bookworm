@@ -1,6 +1,6 @@
-import { loginController } from "./login.controller.js";
+import { login } from "./login.js";
 
-import { signupController } from "./signup.controller.js";
+import { signup } from "./signup.js";
 
-export {loginController,signupController}
+export {login,signup}
 

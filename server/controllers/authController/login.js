@@ -4,7 +4,7 @@ import jwt  from "jsonwebtoken";
 import "dotenv/config"
 import { generateToken } from "../../utils/tokens.js";
 
-export const loginController = async(req,res) =>{
+export const login = async(req,res) =>{
     try {
         let {username, password} = req.body;
         if(!username  || !password) {
