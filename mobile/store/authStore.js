@@ -88,16 +88,23 @@ export const useAuthStore = create((set)=>({
     },
     
     checkAuth : async () => {
-        let token = await AsyncStorage.getItem("token");
-        let userJSON = await AsyncStorage.getItem("user");
-        let user = null;
-        if(!userJSON) {
-            user = JSON.parse(userJSON);
-        }
-        console.log(user);
+        try {
+            set ({isLoading : true});
+            let token = await AsyncStorage.getItem("token");
+            let userJSON = await AsyncStorage.getItem("user");
+            let user = userJSON ? JSON.parse(userJSON) : null;
 
-        set({user,token});
-        return true;
+            console.log("user -> "+ user);
+
+            set({user,token});
+            
+            return true;
+        } catch (error) {
+            console.log(error);
+        }finally{
+            set({isLoading : false});
+        }
+       
     }
 
 
