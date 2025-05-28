@@ -10,7 +10,7 @@ export const deleteBook = async (req,res) =>{
         let book = Book.findById(id);
         if(!book) return res.json({"message" : "Book not found"});
         
-        if(req.user._id.toString() !== book.owner.toString()) return res.json({"message" : "You are not owner of this book."});
+        if(req.user._id.toString() !== book.owner.toString()) return res.json({"message" : "You are not owner of this book.", "success" : false});
         
         // deleting from cloudinary 
         if(book.imageURL) {
@@ -18,10 +18,10 @@ export const deleteBook = async (req,res) =>{
         }
 
         await Book.findByIdAndDelete(id);
-        return res.json({"message" : "Book deleted successfully "});
+        return res.json({"message" : "Book deleted successfully ", "success" : true});
 
     } catch (error) {
         console.log("error in deleting book");
-        return res.json({"message" : "Internal server error"});
+        return res.json({"message" : "Internal server error", "success" : false});
     }
 }
