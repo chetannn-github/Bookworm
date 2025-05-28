@@ -18,6 +18,7 @@ const Signup = () => {
   let handleSignup = async () =>{
     if(!email || !password || !username) {
       Alert.alert("error","please fill all the field");
+      return;
     }
     let result = await register(username,email,password);
     console.log(result);
