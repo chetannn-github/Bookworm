@@ -1,18 +1,30 @@
-import { View, Text, KeyboardAvoidingView, ScrollView, Image, TextInput, useWindowDimensions, Touchable, TouchableOpacity, ActivityIndicator, Platform } from 'react-native'
+import { View, Text, KeyboardAvoidingView, ScrollView, Image, TextInput, useWindowDimensions, Touchable, TouchableOpacity, ActivityIndicator, Platform, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { Link } from 'expo-router'
 import styles from '../../assets/styles/login.styles'
 import {Ionicons} from "@expo/vector-icons"
 import COLORS from '../../constants/color'
+import { useAuthStore } from '../../store/authStore'
 
 const Login = () => {
-  let [email,setEmail] = useState("");
+  let {login, isLoading} = useAuthStore();
+  let [username,setUsername] = useState("");
   let [password,setPassword] = useState("");
   let [showPassword,setShowPassword] = useState(false);
-  let [isLoading, setIsLoading] = useState(false);
 
-  let handleLogin = () =>{
-    console.log("login fn chal rha hh");
+
+  let handleLogin = async() =>{
+    if(!username || !password) {
+      Alert.alert("error","please fill all the field");
+    }
+
+    let result = await login(username, password);
+    
+    if(result?.error) {
+      Alert.alert("error " , result.error);
+    }
+
+
   }
 
   return (
@@ -36,7 +48,7 @@ const Login = () => {
           <View style = {styles.formContainer}>
             {/* email input */}
             <View style= {styles.inputGroup}>
-              <Text style = {styles.label}>Email</Text>
+              <Text style = {styles.label}>Username</Text>
               <View style= {styles.inputContainer}>
                 <Ionicons
                 name='mail-outline'
@@ -46,12 +58,12 @@ const Login = () => {
                 />
                 <TextInput 
                 style = {styles.input}
-                value={email}
-                onChangeText={(val)=>setEmail(val)}
-                keyboardType='email-address'
-                placeholder='enter your email address'
+                value={username}
+                onChangeText={(val)=>setUsername(val)}
+                keyboardType='default'
+                placeholder='enter your username'
                 placeholderTextColor={COLORS.placeholderText}
-                maxLength={15}
+                maxLength={25}
                 />
 
                 
@@ -76,7 +88,7 @@ const Login = () => {
                 onChangeText={(val)=> setPassword(val)}
                 placeholderTextColor={COLORS.placeholderText}
                 secureTextEntry = {!showPassword}
-                maxLength={15}
+                maxLength={25}
                 
                 />
                 <TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
