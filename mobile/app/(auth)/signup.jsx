@@ -1,20 +1,31 @@
-import { View, Text, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, KeyboardAvoidingView, Image, TextInput, TouchableOpacity, ActivityIndicator, Platform, Alert } from 'react-native'
+import React, { use, useState } from 'react'
 import { Link } from 'expo-router'
 import styles from '../../assets/styles/login.styles'
 import {Ionicons} from "@expo/vector-icons"
 import COLORS from '../../constants/color'
+import { useAuthStore } from '../../store/authStore'
 
 const Signup = () => {
+  let {register, isLoading} = useAuthStore();
+
   let [username, setUsername] = useState("");
   let [email,setEmail] = useState("");
   let [password,setPassword] = useState("");
   let [showPassword,setShowPassword] = useState(false);
-  let [isLoading, setIsLoading] = useState(false);
 
-  let handleSignup = () =>{
-    
-    console.log("Signup fn chal rha hh");
+
+  let handleSignup = async () =>{
+    if(!email || !password || !username) {
+      Alert.alert("error","please fill all the field");
+    }
+    let result = await register(username,email,password);
+    console.log(result);
+
+    if(result.error) {
+       Alert.alert("error",result.error);
+    }
+
   }
 
   return (
