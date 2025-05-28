@@ -51,6 +51,7 @@ const Login = () => {
                 keyboardType='email-address'
                 placeholder='enter your email address'
                 placeholderTextColor={COLORS.placeholderText}
+                maxLength={15}
                 />
 
                 
@@ -75,6 +76,7 @@ const Login = () => {
                 onChangeText={(val)=> setPassword(val)}
                 placeholderTextColor={COLORS.placeholderText}
                 secureTextEntry = {!showPassword}
+                maxLength={15}
                 
                 />
                 <TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
@@ -102,7 +104,7 @@ const Login = () => {
 
             <View style = {styles.footer}>
                 <Text style= {styles.footerText}>Don't have an account ?</Text>
-                <Link style={styles.link} href={"/signup"}>Signup</Link>
+                <Link style={styles.link} href={"/(auth)/signup"}>Signup</Link>
             </View>
 
           </View>
