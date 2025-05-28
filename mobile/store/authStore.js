@@ -42,11 +42,13 @@ export const useAuthStore = create((set)=>({
 
     logout : async () => {
         try {
-            await localStorage.removeItem("user");
-            await localStorage.removeItem("token");
+            await AsyncStorage.removeItem("user");
+            await AsyncStorage.removeItem("token");
 
             set({user : null , token : null, isLoading : false})
+
         } catch (error) {
+            console.log(error)
             Alert.alert("error" , "error in logout")
         }
     },
@@ -83,5 +85,20 @@ export const useAuthStore = create((set)=>({
         } finally{
             set ({isLoading : false})
         }
+    },
+    
+    checkAuth : async () => {
+        let token = await AsyncStorage.getItem("token");
+        let userJSON = await AsyncStorage.getItem("user");
+        let user = null;
+        if(!userJSON) {
+            user = JSON.parse(userJSON);
+        }
+        console.log(user);
+
+        set({user,token});
+        return true;
     }
+
+
 }))
