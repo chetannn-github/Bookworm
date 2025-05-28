@@ -1,12 +1,15 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { Image } from 'expo-image'
+import { Link } from 'expo-router'
+
 
 const Index = () => {
+  
   return (
     <View>
-      <Text>index</Text>
-      
+      <Link href={'/(auth)/login'}>Go to auth</Link>
+      <Text>main index route</Text>
+      <Link href={'/(auth)/login'}>Go to auth</Link>
     </View>
   )
 }
