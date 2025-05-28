@@ -9,6 +9,8 @@ import * as FileSystem from "expo-file-system"
 import {API_URL} from "../../constants/api"
 import {useAuthStore} from "../../store/authStore"
 
+import {router} from "expo-router"
+
 const Create = () => {
   let {token} = useAuthStore();
    
@@ -100,9 +102,11 @@ const Create = () => {
 
       setTitle(null);
       setCaption(null);
-      setRating(null);
+      setRating(3);
       setImageBase64(null);
       setImage(null);
+
+      router.push("/(tabs)/home")
       
     } catch (error) {
       Alert.alert("error" , "Internal Server error");
