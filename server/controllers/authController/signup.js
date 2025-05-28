@@ -9,32 +9,33 @@ import { generateToken } from "../../utils/tokens.js";
 
 export const signup = async(req, res) => {
     try {
+        // console.log("signup route hit")
         let {username, email, password} = req.body;
         if(!username || !email || !password) {
-            return res.json({"message" : "some fields are missing"});
+            return res.json({"message" : "some fields are missing","success" : false});
         }
 
         if(username.length < 3) {
-            return res.json({"message" : "usernanme is too short"});
+            return res.json({"message" : "usernanme is too short","success" : false});
         }
 
         if(!isPasswordStrong(password)){
-            return res.json({"message" : "password is not strong"});
+            return res.json({"message" : "password is not strong","success" : false});
         }
 
         if(!isValidEmail(email)) {
-             return res.json({"message" : "email is not valid"});
+             return res.json({"message" : "email is not valid","success" : false});
         }
 
         let existingUser = await User.findOne({username});
         // console.log(existingUser);
         if(existingUser) {
-            return res.json({"message" : "username already exists"});
+            return res.json({"message" : "username already exists","success" : false});
         }
 
         existingUser = await User.findOne({email});
         if(existingUser) {
-            return res.json({"message" : "user already exists"});
+            return res.json({"message" : "user already exists","success" : false});
         }
 
         let profileImage = DICE_BEAR_API + username;
@@ -47,10 +48,10 @@ export const signup = async(req, res) => {
         await user.save();
         console.log(user);
         user.password = undefined;
-        return res.json({user, token});
+        return res.json({user, token,"success" : true});
     } catch (error) {
         console.log(error);
-        return res.json({"message" : error.message});
+        return res.json({"message" : error.message,"success" : false});
     }
     
 }
