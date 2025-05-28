@@ -65,7 +65,7 @@ const Signup = () => {
                 keyboardType='default'
                 placeholder='chetan25'
                 placeholderTextColor={COLORS.placeholderText}
-                maxLength={15}
+                maxLength={25}
                 />
 
                 
@@ -88,7 +88,7 @@ const Signup = () => {
                 keyboardType='email-address'
                 placeholder='chetan@gmail.com'
                 placeholderTextColor={COLORS.placeholderText}
-                maxLength={15}
+                maxLength={25}
                 />
 
                 
@@ -113,7 +113,7 @@ const Signup = () => {
                 onChangeText={(val)=> setPassword(val)}
                 placeholderTextColor={COLORS.placeholderText}
                 secureTextEntry = {!showPassword}
-                maxLength={15}
+                maxLength={25}
                 
                 />
                 <TouchableOpacity onPress={()=>setShowPassword(!showPassword)}>
