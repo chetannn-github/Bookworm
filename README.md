@@ -9,6 +9,18 @@ BookWorm is a mobile application built with React Native and Expo for book enthu
 - **Backend**: Built with Node.js, Express.js, and MongoDB for robust data management.  
 - **Frontend**: Developed with React Native and Expo for a smooth and responsive user experience.  
 
+
+
+## Screenshots
+<p align="center">
+    <img src="https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/home.png" width="30%" />
+    <img src="https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/login.png" width="30%" />
+    <img src="https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/profile.png" width="30%" />
+    <img src="https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/create.png" width="30%" />
+    
+</p>
+
+
 ## Tech Stack
 
 ### Frontend
@@ -71,16 +83,6 @@ BookWorm is a mobile application built with React Native and Expo for book enthu
 
 7. Scan the QR code with the Expo Go app on your mobile device to run the app.
 
-## Screenshots
 
-
-![Home Page](https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/create.png)
-
-### Book Preview
-![Book Preview](https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/home.png)
-![Book Preview](https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/login.png)
-![Book Preview](https://github.com/chetannn-github/Bookworm/blob/main/mobile/assets/preview/profile.png)
-
-## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or suggestions.
