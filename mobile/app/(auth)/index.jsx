@@ -1,6 +1,6 @@
-import { View, Text, KeyboardAvoidingView, ScrollView, Image, TextInput, useWindowDimensions, Touchable, TouchableOpacity, ActivityIndicator, Platform, Alert } from 'react-native'
-import React, { useState } from 'react'
-import { Link } from 'expo-router'
+import { View, Text, KeyboardAvoidingView, ScrollView, Image, TextInput, useWindowDimensions, Touchable, TouchableOpacity, ActivityIndicator, Platform, Alert, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Link, router } from 'expo-router'
 import styles from '../../assets/styles/login.styles'
 import {Ionicons} from "@expo/vector-icons"
 import COLORS from '../../constants/color'
@@ -16,6 +16,7 @@ const Login = () => {
   let handleLogin = async() =>{
     if(!username || !password) {
       Alert.alert("error","please fill all the field");
+      return;
     }
 
     let result = await login(username, password);
@@ -24,7 +25,10 @@ const Login = () => {
       Alert.alert("error " , result.error);
     }
 
-
+    // useEffect(()=>{
+    //   console.log("useeffect chala")
+    //   router.replace("/(tabs)/home")
+    // },[])
   }
 
   return (
@@ -33,7 +37,7 @@ const Login = () => {
     style={{ flex: 1 }}
     >
       <View style={styles.container}>
-
+      
         <View style = {styles.topIllustration}>
           <Image 
           style = {styles.illustrationImage} 
@@ -116,7 +120,9 @@ const Login = () => {
 
             <View style = {styles.footer}>
                 <Text style= {styles.footerText}>Don't have an account ?</Text>
-                <Link style={styles.link} href={"/(auth)/signup"}>Signup</Link>
+                <TouchableWithoutFeedback onPress={()=>router.back()}>
+                  <Text style = {styles.link}>Signup</Text>
+                </TouchableWithoutFeedback>
             </View>
 
           </View>
@@ -124,6 +130,8 @@ const Login = () => {
 
 
       </View>
+
+      <Link href={"/(tabs)/home"}>Go to tabs</Link>
     </KeyboardAvoidingView>
   )
 }
