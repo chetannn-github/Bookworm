@@ -1,4 +1,4 @@
-# BookWorm
+# BookWorm  🐛 🐛
 
 BookWorm is a mobile application built with React Native and Expo for book enthusiasts to explore and recommend books. The app features a seamless infinite scrolling home page and a secure backend powered by Node.js, Express.js, and MongoDB.
 
