@@ -7,6 +7,7 @@ import style from "../../assets/styles/home.styles"
 import { formatMongoDate } from '../../assets/utils/formatDate';
 import COLORS from '../../constants/color';
 import {Ionicons} from "@expo/vector-icons"
+import { sleep } from '../../assets/utils/sleep';
 
 
 const Home = () => {
@@ -35,7 +36,7 @@ const Home = () => {
       // console.log("result");
       // console.log(result);
       if(result?.books) {
-         setBooks((prev)=>([...prev,...result.books]));
+        setBooks((prev)=>([...prev,...result.books]));
         setHasMore(result.totalPages > pageNo);
         setPage(pageNo);
       }
@@ -55,6 +56,7 @@ const Home = () => {
 
     // console.log("hasmore chal rha h")
     if(hasMore && !isLoading && !isRefreshing){
+      await sleep(200);
       await fetchBooks(page+1);
       // console.log("chal rha hh actually")
     }
