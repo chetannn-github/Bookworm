@@ -3,10 +3,11 @@ import { createBook, deleteBook, getBooks} from "../controllers/bookController/i
 import { protectRoute } from "../middlewares/auth.middleware.js";
 
 
-let bookRouter = Router();
+const bookRouter = Router({ mergeParams: true });
+
 
 bookRouter.get("/", protectRoute, getBooks)
 bookRouter.post("/", protectRoute, createBook);
-bookRouter.delete("/", protectRoute, deleteBook);
+bookRouter.delete("/:id", protectRoute, deleteBook);
 
 export default bookRouter
