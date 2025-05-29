@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Touchable, TouchableOpacity, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, Touchable, TouchableOpacity, Alert, ActivityIndicator, RefreshControl } from 'react-native'
+import React, { useEffect, useReducer, useState } from 'react'
 import styles from '../../assets/styles/profile.styles'
 import ProfileHeader from '../../component/Profile/ProfileHeader'
 import LogoutButton from '../../component/Profile/LogoutButton'
@@ -10,9 +10,16 @@ import COLORS from '../../constants/color'
 import { API_URL } from '../../constants/api'
 import { useAuthStore } from '../../store/authStore'
 
+import {router} from "expo-router"
+import { sleep } from '../../assets/utils/sleep'
+
 const Profile = () => {
-  let {token} = useAuthStore();
+  let {token,user} = useAuthStore();
   let [books,setBooks] = useState([]);
+  let [isRefreshing, setIsRefreshing] = useState(false);
+  let [deleteBookId, setDeleteBookId] = useState(null);
+
+
   let renderStarRatings =  ({rating}) => {
     let stars = [];
     for(let i=1; i<=5;i++) {
@@ -28,7 +35,7 @@ const Profile = () => {
     return stars;
   }
   let deleteBook = async(bookId)=>{
-    
+    setDeleteBookId(bookId)
     console.log("delete book started")
     try {
       let response = await fetch(API_URL + "book/" + bookId, {
@@ -46,6 +53,8 @@ const Profile = () => {
     } catch (error) {
       // Alert.alert("error", "Internal Server error");
       console.log("Error in deleting books " + error);
+    } finally {
+      setDeleteBookId(null);
     }
   }
 
@@ -57,9 +66,37 @@ const Profile = () => {
     ]);
   }
 
-  useEffect(()=>setBooks([
-    {"__v": 0, "_id": "6837c799a5703f2d5f06e34f", "caption": "Great book", "createdAt": "2025-05-29T02:34:01.419Z", "imageURL": "https://res.cloudinary.com/dailqmslk/image/upload/v1748486040/yzntgkslq175jmejcyod.jpg", "owner": {"_id": "6836f83da8d88adaac39a972", "profileImage": "https://api.dicebear.com/9.x/pixel-art/svg?seed=chetan", "username": "chetan"}, "rating": 4, "title": "new book", "updatedAt": "2025-05-29T02:34:01.419Z"}, {"__v": 0, "_id": "6837bba45db10b59f82ba453", "caption": "addsasdasdaaaaaaaaaaaaaaaaaaaaaaaa", "createdAt": "2025-05-29T01:43:00.317Z", "imageURL": "https://res.cloudinary.com/dailqmslk/image/upload/v1748482979/dgarhlgdlbc5tan4ay0y.jpg", "owner": {"_id": "6836f83da8d88adaac39a972", "profileImage": "https://api.dicebear.com/9.x/pixel-art/svg?seed=chetan", "username": "chetan"}, "rating": 5, "title": "sadsdsdss", "updatedAt": "2025-05-29T01:43:00.317Z"}, {"__v": 0, "_id": "6837b92f6300a546657728eb", "caption": "12121", "createdAt": "2025-05-29T01:32:31.051Z", "imageURL": "https://res.cloudinary.com/dailqmslk/image/upload/v1748482349/svcdv4tqqlcp5rnpj4a0.jpg", "owner": {"_id": "6836f83da8d88adaac39a972", "profileImage": "https://api.dicebear.com/9.x/pixel-art/svg?seed=chetan", "username": "chetan"}, "rating": 1, "title": "2112122121", "updatedAt": "2025-05-29T01:32:31.051Z"}, {"__v": 0, "_id": "6837b8d88108a2ce99072655", "caption": "Latest post", "createdAt": "2025-05-29T01:31:04.150Z", "imageURL": "https://res.cloudinary.com/dailqmslk/image/upload/v1748482263/rvszw0dd3l04cu9qpmth.jpg", "owner": {"_id": "6836f83da8d88adaac39a972", "profileImage": "https://api.dicebear.com/9.x/pixel-art/svg?seed=chetan", "username": "chetan"}, "rating": 1, "title": "chetann", "updatedAt": "2025-05-29T01:31:04.150Z"}
-  ]),[]);
+  let fetchBooks = async ()=>{
+    try {
+      setIsRefreshing(true);
+      await sleep(200);
+      // console.log(user._id);
+      let response = await fetch(API_URL + "book?userID=" + user._id, {
+        headers : {
+          "Authorization" : "Bearer " + token
+        }
+      });
+
+      let result = await response.json();
+
+      if(!result?.success) {
+        Alert.alert("error", "Internal Server Error");
+        return;
+      }
+
+      setBooks([...result.books]);
+
+      // console.log(result);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setIsRefreshing(false)
+    }
+  }
+
+  useEffect(()=>{fetchBooks()},[]);
+
+  
 
   return (
     <View style={styles.container}>
@@ -76,7 +113,15 @@ const Profile = () => {
       showsVerticalScrollIndicator = {false}
       data={books}
       keyExtractor={(item) => item._id}
-      ListEmptyComponent={<Text>Empty</Text>}
+      ListEmptyComponent={
+        <View style = {styles.emptyContainer}>
+          <Ionicons size={50} color={COLORS.textSecondary} name='book-outline'/>
+          <Text>No Recommendations</Text>
+          <TouchableOpacity style = {styles.addButton} onPress={()=> router.push("/(tabs)/create")}>
+            <Text style = {styles.addButtonText}>Add your first Book</Text>
+          </TouchableOpacity>
+        </View>
+      }
       contentContainerStyle={styles.booksList}
       renderItem={({item})=>(
         <View style={styles.bookItem}>
@@ -90,11 +135,20 @@ const Profile = () => {
           </View>
 
           <TouchableOpacity style= {styles.deleteButton} onPress={() => confirmDelete(item._id)}>
-            <Ionicons name="trash-outline" color={COLORS.primary} size={20}/>
+          {item._id === deleteBookId ? <ActivityIndicator size={20} color={COLORS.primary}/> : <Ionicons name="trash-outline" color={COLORS.primary} size={20}/>}
+            
           </TouchableOpacity>
          
         </View>
       )}
+
+      refreshControl={
+        <RefreshControl  refreshing = {isRefreshing}
+          onRefresh={fetchBooks}
+          colors={[COLORS.primary]}
+          tintColor={COLORS.primary}
+        />
+      }
       />
 
 
