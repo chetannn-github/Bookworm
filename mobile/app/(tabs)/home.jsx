@@ -22,7 +22,7 @@ const Home = () => {
     else if(pageNo == 1) setIsLoading(true); 
 
 
-    console.log("Fetching books");
+    // console.log("Fetching books");
     try {
       setIsLoading(true);
       let response = await fetch(API_URL+"book?page="+pageNo+"&limit=2", {
@@ -32,8 +32,8 @@ const Home = () => {
         }
       });
       let result = await response.json();
-      console.log("result");
-      console.log(result);
+      // console.log("result");
+      // console.log(result);
       if(result?.books) {
          setBooks((prev)=>([...prev,...result.books]));
         setHasMore(result.totalPages > pageNo);
@@ -53,10 +53,10 @@ const Home = () => {
 
   let handleLoadMore = async () =>{
 
-    console.log("hasmore chal rha h")
+    // console.log("hasmore chal rha h")
     if(hasMore && !isLoading && !isRefreshing){
       await fetchBooks(page+1);
-      console.log("chal rha hh actually")
+      // console.log("chal rha hh actually")
     }
   }
 
@@ -65,8 +65,6 @@ const Home = () => {
     return (
       <View style = {style.bookCard}>
         <View style = {style.bookHeader}>
-          {console.log(item.owner)}
-
           <View style = {style.userInfo}>
             <Image source={{uri : item.owner.profileImage}} style={style.avatar} ></Image>
             <Text style = {style.username}>{item?.owner.username}</Text>

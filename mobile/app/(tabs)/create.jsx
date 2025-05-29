@@ -25,7 +25,7 @@ const Create = () => {
     try {
       if(Platform.OS !== 'web') {
         let res = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        console.log(res);
+        // console.log(res);
 
         if(res.status !== "granted") {
           Alert.alert("error" , "we need camera roll permission to upload image");
@@ -73,9 +73,9 @@ const Create = () => {
     }
 
     try {
-      console.log("submit fn chala")
+      // console.log("submit fn chala")
       setIsLoading(true);
-      console.log(image);
+      // console.log(image);
       let uriParts = image.split(".");
       let fileType = uriParts[uriParts.length-1];
       

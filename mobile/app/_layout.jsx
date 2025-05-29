@@ -20,7 +20,7 @@ export default function RootLayout() {
 
   useEffect(()=>{
     if(isLoading) return;
-    console.log("token ->"  + token);
+    // console.log("token ->"  + token);
     
     let isSignedIn = token && user;
     let inAuthScreen = pathname ==='/' || segments[0] === "(auth)";
