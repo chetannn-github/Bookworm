@@ -125,7 +125,7 @@ const Home = () => {
       }
 
       ListEmptyComponent={
-        isLoading ? <ActivityIndicator size={40} color={COLORS.textSecondary}/> : (
+        isLoading  ? (!isRefreshing ? <ActivityIndicator size={40} color={COLORS.textSecondary}/> : null ): (
         <View style ={style.emptyContainer}>
           <Ionicons name='book-outline' size={60}  color={COLORS.textSecondary}></Ionicons>
           <Text style={style.emptyText}>No Recommendation yet</Text>
