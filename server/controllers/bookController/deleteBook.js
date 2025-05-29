@@ -6,9 +6,12 @@ import { deleteImage } from "../../utils/image/index.js";
 
 export const deleteBook = async (req,res) =>{
     try {
+        console.log("delete book hit")
         let {id} = req.params;
-        let book = Book.findById(id);
-        if(!book) return res.json({"message" : "Book not found"});
+        console.log(id);
+        let book = await Book.findById(id);
+        if(!book) return res.json({"message" : "Book not found", "success" : false});
+        console.log(book);
         
         if(req.user._id.toString() !== book.owner.toString()) return res.json({"message" : "You are not owner of this book.", "success" : false});
         
@@ -21,7 +24,7 @@ export const deleteBook = async (req,res) =>{
         return res.json({"message" : "Book deleted successfully ", "success" : true});
 
     } catch (error) {
-        console.log("error in deleting book");
+        console.log(error.message);
         return res.json({"message" : "Internal server error", "success" : false});
     }
 }
